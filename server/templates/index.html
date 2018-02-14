@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Index</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- General info -->
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">General infos</h4>
+            <div>
+              <!-- content -->
+              <div>OS : {{ infos['os'] }}</div>
+              <div>Hostname : {{ infos['hostname'] }}</div>
+              <div>Uptime : {{ infos['uptime'] }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CPU usage -->
+      <div class="col">
+
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">CPU usage</h4>
+            <div>
+              <!-- content -->
+              <div>CPUs numbers : {{ infos['cpu_number'] }}</div>
+              <div>CPUs average frequency : {{ infos['cpu_frequency'] }} Hz</div>
+              <div>CPUs average usage : {{ infos['cpu_usage'] }} %</div>              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- memory usage -->
+      <div class="col-6">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Memory usage</h4>
+            <div>
+              <!-- content -->
+              <div>Memory size : {{ "%.2f"|format(infos['ram_size']/2**20) }} MB</div>
+              <div>Memory used : {{ "%.2f"|format(infos['ram_used']/2**20) }} MB</div>
+              <div data-size="{{ infos['ram_size'] }}" data-usage="{{ infos['ram_used'] }}" id="memory-chart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <!-- disk usage -->
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Disk usage</h4>
+            <div>
+              <!-- content -->
+              <table class="table">
+                  <!-- Columns -->
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Device</th>
+                      <th scope="col">Mountpoint</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Size (MB)</th>
+                      <th scope="col">Used (%)</th>
+                    </tr>
+                  </thead>
+
+                  <!-- Table content -->
+                  <tbody>
+                    {% for infoPartition in infos['partitions'] %}
+                      <tr>
+                        <td>{{ infoPartition['device'] }}</td>
+                        <td>{{ infoPartition['mountpoint'] }}</td>
+                        <td>{{ infoPartition['type'] }}</td>
+                        <td>{{ "%.2f"|format(infoPartition['size']/2**20) }}</td>
+                        <td>{{ infoPartition['used'] }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load average -->
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Load average</h4>
+            <div>
+              <!-- content -->
+              CONTENT
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>  
+  <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
